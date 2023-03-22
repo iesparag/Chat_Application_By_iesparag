@@ -1,6 +1,7 @@
 const express = require("express");
 const connectDB = require("./config/db");
 require('dotenv').config()
+var cors = require('cors')
 const { chats } = require("./data/data");
 const colors = require("colors");
 const userRoutes = require("./routes/userRoutes");
@@ -11,8 +12,9 @@ const { notFound, errorHandler } = require("./middleware/errorMiddleware");
 connectDB()
 
 const app = express()
+app.use(cors())
  app.use(express.json())
-
+ 
 app.get("/",(req,res)=>{
     res.send("api is running successfully")
 })
@@ -30,10 +32,10 @@ const server = app.listen(process.env.PORT || 5000,()=> {
 })
 
 const io = require('socket.io')(server,{
-    pingTimeout: 120000,
-    cors:{
-        origin: "http://localhost:3000",
-    }
+    pingTimeout: 120000
+    // cors:{
+    //     origin: "http://localhost:3000",
+    // }
 })
 
 io.on("connection",(socket) => {
